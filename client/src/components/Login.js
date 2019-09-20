@@ -1,5 +1,6 @@
 import React from "react";
 import axiosWithAuth from "../utilites/axiosWithAuth";
+import { Container, Header, Button, Form  } from 'semantic-ui-react'
 
 class Login extends React.Component {
   
@@ -34,24 +35,30 @@ class Login extends React.Component {
   
   render() {
   return (
-    <>
-      <h1>Welcome to the Bubble App!</h1>
-      <form onSubmit={this.login}>
+    <Container text>
+      <Header as='h2'>Welcome to the Bubble App!</Header>
+      <Form onSubmit={this.login}>
+        <Form.Field>
+        <label>Login</label>
           <input
             type="text"
             name="username"
             value={this.state.credentials.username}
             onChange={this.handleChange}
           />
+        </Form.Field>
+        <Form.Field>
+        <label>Password</label>
           <input
             type="password"
             name="password"
             value={this.state.credentials.password}
             onChange={this.handleChange}
           />
-          <button>Log in</button>
-        </form>
-    </>
+        </Form.Field>
+          <Button type='submit'>Log in</Button>
+        </Form>
+    </Container>
   );
   }
 };
