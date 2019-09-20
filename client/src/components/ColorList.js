@@ -6,17 +6,17 @@ const initialColor = {
   code: { hex: "" }
 };
 
-const ColorList = ({ colors, updateColors }) => {
+const ColorList = ({ colors, updateColors, update, setUpdate }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
-
-  console.log(colorToEdit);
 
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
   };
+
+  console.log(updateColors)
 
   const saveEdit = e => {
     e.preventDefault();
@@ -24,7 +24,7 @@ const ColorList = ({ colors, updateColors }) => {
       .put(`/colors/${colorToEdit.id}`, colorToEdit)
       .then(res => {
         console.log(`Updated data of ${colorToEdit.color}`, res);
-
+        setUpdate(!update)
     })
       .catch(err => console.log('Oh-oh, something wrong', err));
   };
