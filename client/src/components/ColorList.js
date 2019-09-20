@@ -1,22 +1,45 @@
 import React, { useState } from "react";
 import axiosWithAuth from "../utilites/axiosWithAuth";
 
+import { Button } from 'semantic-ui-react';
+
 const initialColor = {
   color: "",
   code: { hex: "" }
 };
 
+// const sendColor = {
+//   color: "",
+//   code: { hex: "" }
+// };
+
 const ColorList = ({ colors, updateColors, update, setUpdate }) => {
   // console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
-
+  const [adding, setAdding] = useState(false);
+  const [colorToAdd, setColorToAdd] = useState(initialColor)
+  
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
   };
 
-  // console.log(updateColors)
+  const addColor = () => {
+    axiosWithAuth()
+    .post(`http://localhost:5000/api/colors`, colorToAdd)
+    .then(res => {
+      console.log(`Color ${colorToAdd.color} was added`, res)
+      setColorToAdd(initialColor)
+      setUpdate(!update)
+    })
+    .catch(err => console.log(err))
+  }
+
+
+  const addColorTab = () => {
+    setAdding(true);
+  };
 
   const saveEdit = e => {
     e.preventDefault();
@@ -58,6 +81,8 @@ const ColorList = ({ colors, updateColors, update, setUpdate }) => {
           </li>
         ))}
       </ul>
+      <Button onClick={() => addColorTab()}>Add color</Button>
+
       {editing && (
         <form onSubmit={saveEdit}>
           <legend>edit color</legend>
@@ -88,8 +113,47 @@ const ColorList = ({ colors, updateColors, update, setUpdate }) => {
           </div>
         </form>
       )}
+
+
+      {adding && (
+        <form>
+        <legend>add color</legend>
+        <label>
+          color name:
+          <input
+            type='text'
+            name='color'
+            onChange={event => 
+              setColorToAdd({ ...colorToAdd, color: event.target.value })
+            }
+            placeholder='color name'
+            value={colorToAdd.color}
+          />
+        </label>
+
+        <label>
+          hex code:
+          <input
+            type='text'
+            name='hex'
+            onChange={event => 
+              setColorToAdd({ ...colorToAdd, code: { hex: event.target.value }})}
+            placeholder="hex code"
+            value={colorToAdd.code.hex}
+          />
+        </label>
+
+        <div className="button-row">
+          <button type='button' onClick={() => addColor()}>submit</button>
+          <button onClick={() => setAdding(false)}>cancel</button>
+        </div>
+      </form>
+      )}
+
       <div className="spacer" />
-      {/* stretch - build another form here to add a color */}
+
+ 
+
     </div>
   );
 };
