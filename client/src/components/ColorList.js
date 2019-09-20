@@ -7,7 +7,7 @@ const initialColor = {
 };
 
 const ColorList = ({ colors, updateColors, update, setUpdate }) => {
-  console.log(colors);
+  // console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
@@ -16,7 +16,7 @@ const ColorList = ({ colors, updateColors, update, setUpdate }) => {
     setColorToEdit(color);
   };
 
-  console.log(updateColors)
+  // console.log(updateColors)
 
   const saveEdit = e => {
     e.preventDefault();
@@ -30,7 +30,13 @@ const ColorList = ({ colors, updateColors, update, setUpdate }) => {
   };
 
   const deleteColor = color => {
-    // make a delete request to delete this color
+    axiosWithAuth()
+      .delete(`/colors/${color.id}`)
+      .then(res => {
+        console.log(`${color.color} color was deleted`, res);
+        setUpdate(!update)
+    })
+      .catch(err => console.log('Oh-oh, something wrong', err));
   };
 
   return (
